@@ -86,31 +86,21 @@ const Footer = () => (
         <div className="col-4 col-12-medium">
           <section>
             <header>
-              <h2>Vitae tempor lorem</h2>
+              <h2>Find me here</h2>
             </header>
             <ul className="social">
-              <li><a className="icon brands fa-facebook-f" href="#"><span className="label">Facebook</span></a></li>
-              <li><a className="icon brands fa-twitter" href="#"><span className="label">Twitter</span></a></li>
-              <li><a className="icon brands fa-dribbble" href="#"><span className="label">Dribbble</span></a></li>
-              <li><a className="icon brands fa-tumblr" href="#"><span className="label">Tumblr</span></a></li>
-              <li><a className="icon brands fa-linkedin-in" href="#"><span className="label">LinkedIn</span></a></li>
+            <li><a className="icon brands fa-github" href="https://github.com/ibra337" target="_blank" rel="noopener noreferrer"><span className="label">GitHub</span></a></li>
+              <li><a className="icon brands fa-linkedin-in" href="https://www.linkedin.com/in/ibrahim-kamil-jadou-988a86298"><span className="label">LinkedIn</span></a></li>
             </ul>
             <ul className="contact">
-              <li>
-                <h3>Address</h3>
-                <p>
-                  Untitled Incorporated<br />
-                  1234 Somewhere Road Suite<br />
-                  Nashville, TN 00000-0000
-                </p>
-              </li>
+
               <li>
                 <h3>Mail</h3>
-                <p><a href="#">someone@untitled.tld</a></p>
+                <p><a href="mailto:ibrahim.jadou@gmail.com">ibrahim.jadou@gmail.com</a></p>
               </li>
               <li>
                 <h3>Phone</h3>
-                <p>(800) 000-0000</p>
+                <p>+48 533 223 006</p>
               </li>
             </ul>
           </section>

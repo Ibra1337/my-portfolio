@@ -1,43 +1,40 @@
 import React from 'react';
 
 const Intro = () => (
-<section id="intro" className="container">
+  <section id="intro" className="container">
     <div className="row">
-    <div className="col-4 col-12-medium">
+      <div className="col-4 col-12-medium">
         <section className="first">
-        <i className="icon solid featured fa-cog"></i>
-        <header>
-            <h2>Ipsum consequat</h2>
-        </header>
-        <p>Nisl amet dolor sit ipsum veroeros sed blandit consequat veroeros et magna tempus.</p>
+          <i className="icon solid featured fa-cog"></i>
+          <header>
+            <h2>Engenering</h2>
+          </header>
+          <p>I’m passionate about building, creating, and designing innovative solutions.</p>
         </section>
-    </div>
-    <div className="col-4 col-12-medium">
+      </div>
+      <div className="col-4 col-12-medium">
         <section className="middle">
-        <i className="icon solid featured alt fa-bolt"></i>
-        <header>
-            <h2>Magna etiam dolor</h2>
-        </header>
-        <p>Nisl amet dolor sit ipsum veroeros sed blandit consequat veroeros et magna tempus.</p>
+          <i className="icon solid featured alt fa-code"></i>
+          <header>
+            <h2>Coding</h2>
+          </header>
+          <p>I'm driven by the challenge of coding, crafting efficient and creative solutions. Each challenge is an oportunity to learn.</p>
         </section>
-    </div>
-    <div className="col-4 col-12-medium">
+      </div>
+      <div className="col-4 col-12-medium">
         <section className="last">
-        <i className="icon solid featured alt2 fa-star"></i>
-        <header>
-            <h2>Tempus adipiscing</h2>
-        </header>
-            <p>Nisl amet dolor sit ipsum veroeros sed blandit consequat veroeros et magna tempus.</p>
+          <i className="icon solid featured fa-crosshairs"></i>
+          <header>
+            <h2>Goal driven</h2>
+          </header>
+          <p>Ready to take up any challenge that sdands on my way to achieve my goal.</p>
         </section>
-    </div>
+      </div>
     </div>
     <footer>
-    <ul className="actions">
-        <li><a href="#" className="button large">Get Started</a></li>
-        <li><a href="#" className="button alt large">Learn More</a></li>
-    </ul>
+
     </footer>
-    </section>
+  </section>
 );
 
 export default Intro;

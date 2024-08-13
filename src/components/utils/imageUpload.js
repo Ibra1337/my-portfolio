@@ -38,7 +38,7 @@ const rescaleImage = (file, maxWidth, maxHeight) => {
     });
 };
 
-export const uploadImage = async (file) => {
+export const uploadImage = async (file , token) => {
     try {
         // Resize the image before uploading
         const resizedFile = await rescaleImage(file, 600, 600);
@@ -47,6 +47,7 @@ export const uploadImage = async (file) => {
         const response = await fetch(`http://127.0.0.1:9000/api/v1/cloud/${file.name}`, {
             method: 'GET',
             headers: {
+                Authorization: `Bearer ${token}` ,
                 'Content-Type': 'application/json',
             },
         });

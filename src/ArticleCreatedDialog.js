@@ -14,7 +14,7 @@ function CreateArticle() {
         <main>
           <ArticleCreatedComponent />
         </main>
-        <Footer />
+
       </div>
     );
   }

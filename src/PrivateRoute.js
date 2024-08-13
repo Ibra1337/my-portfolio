@@ -1,27 +1,29 @@
 import React, { useEffect } from 'react';
-import { useAuth } from 'oidc-react';
-import { useNavigate } from 'react-router-dom';
+import { useAuth, UserManager } from 'oidc-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-
-//Todo: why the childreen si undefined
 const PrivateRoute = ({ children }) => {
-  const { userData, signIn } = useAuth();
+  const auth = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
-  console.log("Child: " + children)
 
   useEffect(() => {
-    if (!userData) {
-      signIn().catch(() => {
-        navigate('/'); // Navigate to the home page or any fallback page if signIn fails
-      });
+    if (!auth.isLoading && !auth.userData) {
+      console.log("Unauthenticated: Redirecting to login...");
+      auth.userManager.signinRedirect({
+        state: {redirectUri: location.pathname}
+      }
+      ); // Redirect to the login page
+    } else if (auth.userData) {
+      console.log("Authenticated");
     }
-  }, [userData, signIn, navigate]);
+  }, [auth.isLoading, auth.userData, location.pathname]);
 
-  if (!userData) {
-    return <div>Redirecting to login...</div>;
+  if (auth.isLoading || !auth.userData) {
+    return <div>Loading...</div>; // Show loading indicator while authentication state is being determined
   }
-  return children;
+
+  return children; // Render the children once authenticated
 };
 
 export default PrivateRoute;
-

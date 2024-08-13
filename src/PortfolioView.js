@@ -7,14 +7,21 @@ import ArticleDetailis from './components/Portfolio';
 import Blog from './components/Blog';
 import Footer from './components/Footer';
 import Portfolio from './components/Portfolio';
-
+import Banner from './components/Banner';
+import Intro from './components/Intro';
+import Nav from './components/Nav';
 
 function PortfolioView() {
 return (
     <div className="PortfolioView">
-        <Header />
+        
     <main>
-        <Portfolio />
+    <Nav />
+    <Banner />
+    <Intro />
+    
+    <Portfolio />
+        
         <header class="major"></header>
     </main>
     <Footer />

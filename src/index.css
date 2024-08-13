@@ -2191,23 +2191,27 @@ input, select, textarea {
 			}
 
 /* Banner */
+	
 
-	#banner {
-		background: #CCE8F4 url("resources/images/pic01.jpg");
-		background-position: center center;
-		background-size: auto 100%;
-		background-repeat: no-repeat;
-		text-align: center;
-		position: relative;
-		padding: 8em 0;
-		margin: 4em 0 0 0;
-	}
+
+#banner {
+    background: url("resources/images/hacker_bg.jpg");
+    background-position: center center;
+    background-size: auto 100%;
+    background-repeat: repeat;
+    text-align: center;
+    position: relative;
+    padding: 8em 0;
+    margin: 0;
+}
+
+		
 
 		#banner header {
 			background-color: rgba(34, 30, 31, 0.98);
 			display: inline-block;
 			padding: 2.5em 5em;
-			border-radius: 5px;
+			border-radius: 1%;
 		}
 
 			#banner header h2 {
@@ -2228,8 +2232,11 @@ input, select, textarea {
 /* Intro */
 
 	#intro {
+		margin-top: 5%;
+		margin-bottom: 5%;
 		text-align: center;
 		overflow: hidden;
+		background-color: white;
 	}
 
 		#intro section {
@@ -2416,8 +2423,9 @@ input, select, textarea {
 		/* Banner */
 
 			#banner {
-				padding: 6em 0;
-				margin: 3em 0 0 0;
+				
+				padding: 0 0;
+				margin: 0 0 0 0;
 			}
 
 		/* Intro */
@@ -2509,6 +2517,7 @@ input, select, textarea {
 
 			#nav {
 				display: none;
+				
 			}
 
 		/* Intro */
