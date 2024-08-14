@@ -3,14 +3,13 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from 'oidc-react';
+
 import { useNavigate } from 'react-router-dom';
 import Editor from './Editor'; // Ensure correct path
 import { uploadImage } from './utils/imageUpload'; // Import the shared image upload function
 
 const ArticleForm = () => {
-    const { userData } = useAuth();
-    const token = userData?.access_token;
+
     const navigate = useNavigate(); // Add the useNavigate hook
 
     const [formData, setFormData] = useState({
@@ -21,7 +20,7 @@ const ArticleForm = () => {
         tags: '',
         coverImg: ''
     });
-
+    const token = "placeholsder_impement htis "
     const [artId, setArticleId] = useState('');
     const [message, setMessage] = useState(null);
     const [coverImagePreview, setCoverImagePreview] = useState('');

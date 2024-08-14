@@ -1,49 +1,57 @@
-// src/Callback.js
 import React, { useEffect } from 'react';
-import { useAuth } from 'oidc-react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useSignIn } from 'react-auth-kit';
 
 const Callback = () => {
-  const { isLoading, error, userManager } = useAuth();
-  const auth = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
+  const signIn = useSignIn();
 
   useEffect(() => {
-    const code = searchParams.get('code');
-    const state = searchParams.get('state');
+    const fetchTokens = async () => {
+      const params = new URLSearchParams(location.search);
+      const code = params.get('code');
+      const codeVerifier = localStorage.getItem('code_verifier'); // Retrieve the code_verifier
 
-    if (!isLoading && code && state && !auth.userData) {
-      console.log("unautehnticated")
-      userManager.signinCallback().then((user) => {
-        
-        console.log('User: ' +user)
+      if (code && codeVerifier) {
+        // Exchange the authorization code for tokens
+        const response = await fetch('http://localhost:8080/realms/myrealm/protocol/openid-connect/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            grant_type: 'authorization_code',
+            code,
+            redirect_uri: 'http://localhost:3000/callback',
+            client_id: 'portfolio-opid',
+            code_verifier: codeVerifier // Include the code_verifier in the token request
+          })
+        });
 
-      }).catch((err) => {
-        console.error('Signin callback error', err);
-      });
-    }
-    else {
-      
-      console.log("authenticated")
-    }
-  }, [isLoading, error, navigate,  userManager, searchParams]);
+        const data = await response.json();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+        if (data.access_token) {
+          signIn({
+            token: data.access_token,
+            expiresIn: data.expires_in,
+            tokenType: 'Bearer',
+            authState: { username: data.id_token } // Set any additional auth state here
+          });
 
-  if (error) {
-    console.error('OIDC error:', error);
-    return <div>Error: {error.message}</div>;
-  }
-  console.log(auth.userData)
-  console.log("=============================================================");
-  console.log(auth.userData?.access_token)
-  return;
+          // Redirect to the originally requested page or home page
+          navigate('/');
+        } else {
+          // Handle error
+          console.error('Authentication failed');
+        }
+      }
+    };
+
+    fetchTokens();
+  }, [location.search, navigate, signIn]);
+
+  return <div>Loading...</div>;
 };
-
 
 export default Callback;

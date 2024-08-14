@@ -6,14 +6,14 @@ import hljs from 'highlight.js';
 import '../index.css'; // Import your custom CSS file
 import { uploadImage } from './utils/imageUpload'; 
 import { fetchCodeSnippet } from './utils/gitUtils';
-import { useAuth } from 'oidc-react';
+
 import keyboardShortcuts from './utils/keyboardShortcouts'; // Import your custom hook
 
 const Editor = forwardRef(({ value, onChange }, ref) => {
   const [content, setContent] = useState(value || '');
   const quillRef = useRef(null);
-  const { userData } = useAuth();
-  const token = userData?.access_token;
+
+
 
   keyboardShortcuts(quillRef); // Use the custom hook
 
@@ -53,7 +53,7 @@ const Editor = forwardRef(({ value, onChange }, ref) => {
       const file = input.files[0];
       if (file) {
         try {
-          const { url } = await uploadImage(file , token);
+          const { url } = await uploadImage(file , "token_remove_itFropmEditor");
           const quillEditor = quillRef.current.getEditor();
           const range = quillEditor.getSelection();
           quillEditor.insertEmbed(range.index, 'image', url);

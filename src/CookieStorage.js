@@ -1,47 +1,19 @@
-// src/CookieStorage.js
+import Cookies from 'js-cookie';
 
-class CookieStorage {
-  constructor() {
-    this.storePrefix = 'oidc.';
-  }
-
-  set(key, value) {
-    try {
-      document.cookie = `${this.storePrefix}${key}=${encodeURIComponent(value)}; path=/`;
-    } catch (err) {
-      console.error('Error setting cookie:', err);
+class CookieStateStore {
+    get(key) {
+        return Promise.resolve(Cookies.get(key));
     }
-  }
 
-  get(key) {
-    try {
-      const name = `${this.storePrefix}${key}=`;
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        let cookie = cookies[i].trim();
-        if (cookie.startsWith(name)) {
-          return decodeURIComponent(cookie.substring(name.length));
-        }
-      }
-      return null;
-    } catch (err) {
-      console.error('Error getting cookie:', err);
-      return null;
+    set(key, value) {
+        Cookies.set(key, value, { secure: true, sameSite: 'Strict', expires: 7 });
+        return Promise.resolve();
     }
-  }
 
-  remove(key) {
-    try {
-      document.cookie = `${this.storePrefix}${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    } catch (err) {
-      console.error('Error removing cookie:', err);
+    remove(key) {
+        Cookies.remove(key);
+        return Promise.resolve();
     }
-  }
-
-  // Static method to create an instance of CookieStorage
-  static createInstance() {
-    return new CookieStorage();
-  }
 }
 
-export default CookieStorage;
+export default CookieStateStore;

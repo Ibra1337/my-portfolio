@@ -1,31 +1,37 @@
-// src/App.js
 import React from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider as OidcAuthProvider } from 'oidc-react';
+import { AuthProvider } from 'react-auth-kit'; // Import from 'react-auth-kit'
 import ArticleDetails from './ArticleDetails';
 import PortfolioView from './PortfolioView';
 import CreateArticle from './CreateArticle';
-import Callback from './Callback';
 import PrivateRoute from './PrivateRoute';
 import ArticleCreatedDialog from './ArticleCreatedDialog';
-import oidcConfig from './config';
+import createStore from 'react-auth-kit/createStore';
+
+const store = createStore({
+  authName: '_auth',
+  authType: 'cookie',
+  cookieDomain: window.location.hostname,
+  cookieSecure: false
+});
 
 function App() {
+
+
+  
   return (
-    <Router>
-      <OidcAuthProvider {...oidcConfig}>
+    <AuthProvider store={store}    >
+      <Router>
         <Routes>
           <Route path="/" element={<PortfolioView />} />
           <Route path="/articles/:id" element={<ArticleDetails />} />
-          <Route path="/callback" element={<Callback />} />
           <Route path="/article-created" element={<ArticleCreatedDialog />} />
           <Route path="/new-article" element={
-          <PrivateRoute>
-              <CreateArticle />
-          </PrivateRoute>} />
+            <PrivateRoute element={<CreateArticle />} />
+          } />
         </Routes>
-      </OidcAuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
