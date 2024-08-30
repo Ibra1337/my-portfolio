@@ -39,10 +39,12 @@ const rescaleImage = (file, maxWidth, maxHeight) => {
 };
 
 export const uploadImage = async (file , token) => {
+    console.log("before try: " + token)
+    
     try {
         // Resize the image before uploading
         const resizedFile = await rescaleImage(file, 600, 600);
-        
+        console.log("form upload: " + token)
         // Request the pre-signed URL from your backend
         const response = await fetch(`http://127.0.0.1:9000/api/v1/cloud/${file.name}`, {
             method: 'GET',

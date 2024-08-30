@@ -6,14 +6,35 @@ import hljs from 'highlight.js';
 import '../index.css'; // Import your custom CSS file
 import { uploadImage } from './utils/imageUpload'; 
 import { fetchCodeSnippet } from './utils/gitUtils';
-
+import { userManager } from '../sec/UserManager';
+import { useNavigate } from 'react-router-dom';
 import keyboardShortcuts from './utils/keyboardShortcouts'; // Import your custom hook
 
 const Editor = forwardRef(({ value, onChange }, ref) => {
   const [content, setContent] = useState(value || '');
   const quillRef = useRef(null);
+  const [token, setToken] = useState(null); // State for token
+  const navigate = useNavigate(); // Add the useNavigate hook
+  useEffect(() => {
+    // Fetch the token from userManager
+    const fetchToken = async () => {
+        try {
+            const user = await userManager.getUser(); // Await the promise
+            if (user) {
+                setToken(user.access_token);
+                console.log("Access token1: " + user.access_token);
+            } else {
+                console.error('User not authenticated');
+                navigate('/login'); // Redirect to login if user is not authenticated
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            navigate('/login'); // Handle the error (e.g., by redirecting to login)
+        }
+    };
 
-
+    fetchToken(); // Call the async function
+}, [navigate]); // Add navigate to the dependency array
 
   keyboardShortcuts(quillRef); // Use the custom hook
 
@@ -53,7 +74,9 @@ const Editor = forwardRef(({ value, onChange }, ref) => {
       const file = input.files[0];
       if (file) {
         try {
-          const { url } = await uploadImage(file , "token_remove_itFropmEditor");
+          const user = await userManager.getUser()
+          const token = user.access_token
+          const { url } = await uploadImage(file ,token);
           const quillEditor = quillRef.current.getEditor();
           const range = quillEditor.getSelection();
           quillEditor.insertEmbed(range.index, 'image', url);

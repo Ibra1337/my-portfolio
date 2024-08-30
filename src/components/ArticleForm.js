@@ -1,15 +1,11 @@
-
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { userManager } from '../sec/UserManager';
 import { useNavigate } from 'react-router-dom';
 import Editor from './Editor'; // Ensure correct path
 import { uploadImage } from './utils/imageUpload'; // Import the shared image upload function
 
 const ArticleForm = () => {
-
     const navigate = useNavigate(); // Add the useNavigate hook
 
     const [formData, setFormData] = useState({
@@ -20,11 +16,33 @@ const ArticleForm = () => {
         tags: '',
         coverImg: ''
     });
-    const token = "placeholsder_impement htis "
-    const [artId, setArticleId] = useState('');
+
+    const [articleId, setArticleId] = useState(''); // State to store the article ID
     const [message, setMessage] = useState(null);
     const [coverImagePreview, setCoverImagePreview] = useState('');
     const [loading, setLoading] = useState(false);
+    const [token, setToken] = useState(null); // State for token
+
+    useEffect(() => {
+        // Fetch the token from userManager
+        const fetchToken = async () => {
+            try {
+                const user = await userManager.getUser(); // Await the promise
+                if (user) {
+                    setToken(user.access_token);
+                    console.log("Access token1: " + user.access_token);
+                } else {
+                    console.error('User not authenticated');
+                    navigate('/login'); // Redirect to login if user is not authenticated
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                navigate('/login'); // Handle the error (e.g., by redirecting to login)
+            }
+        };
+
+        fetchToken(); // Call the async function
+    }, [navigate]); // Add navigate to the dependency array
 
     useEffect(() => {
         const fetchArticleId = async () => {
@@ -56,8 +74,11 @@ const ArticleForm = () => {
 
     const handleCoverImageUpload = async (e) => {
         const file = e.target.files[0];
-        if (file && token && artId) {
+        const user = await userManager.getUser()
+        const token = user.access_token
+        if (file && token && articleId) {
             try {
+                console.log("before img+ " + token )
                 const { url } = await uploadImage(file, token);
                 console.log('Image uploaded, URL:', url); // Debugging line
                 setFormData({
@@ -74,7 +95,8 @@ const ArticleForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        const user = await userManager.getUser()
+        const token = user.access_token
         if (!token) {
             setMessage('Error: No authentication token found');
             return;
@@ -92,7 +114,7 @@ const ArticleForm = () => {
         const data = {
             ...formData,
             tags: tagsArray,
-            articleId: artId
+            articleId: articleId
         };
 
         console.log('Submitting article data:', data); // Debugging line
@@ -128,7 +150,7 @@ const ArticleForm = () => {
                     </label>
                     <label>
                         Content:
-                        <Editor value={formData.content} onChange={handleQuillChange} />
+                        <Editor value={formData.content} onChange={handleQuillChange} token={token} /> {/* Pass the token */}
                     </label>
                     <label>
                         GitHub URL:
