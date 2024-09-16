@@ -2,18 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import baseUrl from '../ProtfolioConfig';
 
 const Portfolio = () => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
- 
+
     useEffect(() => {
 
         const fetchArticles = async () => {
             try {
-                const response = await axios.get('http://localhost:9000/api/v1/article');
+                const response = await axios.get(baseUrl + '/article');
                 console.log(response.data)
                 setArticles(response.data);
                 setLoading(false);  

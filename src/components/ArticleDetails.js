@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import "./ArticleDetails"; // Ensure you have appropriate styling
-
+import baseUrl from '../ProtfolioConfig';
 const ArticleDetails = () => {
     const { id } = useParams();
     const [article, setArticle] = useState(null);
@@ -12,7 +12,7 @@ const ArticleDetails = () => {
     useEffect(() => {
         const fetchArticle = async () => {
             try {
-                const response = await axios.get(`http://localhost:9000/api/v1/article/${id}`);
+                const response = await axios.get(baseUrl + `/article/${id}`);
                 setArticle(response.data);
                 setLoading(false);
             } catch (err) {

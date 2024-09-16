@@ -7,10 +7,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const rootElement = document.getElementById('root');
-
+process.env.
 ReactDOM.createRoot(rootElement).render(
+  
   <React.StrictMode>
-
+  
       <App />
 
   </React.StrictMode>

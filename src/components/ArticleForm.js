@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react'; // Ensure useContext is imported
 import axios from 'axios';
-import { userManager } from '../sec/UserManager';
 import { useNavigate } from 'react-router-dom';
 import Editor from './Editor'; // Ensure correct path
 import { uploadImage } from './utils/imageUpload'; // Import the shared image upload function
-
+import { AuthContext } from '../sec/AuthProvider';
+import baseUrl from '../ProtfolioConfig';
 const ArticleForm = () => {
-    const navigate = useNavigate(); // Add the useNavigate hook
-
+    const navigate = useNavigate();
+    const { token } = useContext(AuthContext); // Use the token from AuthContext
+    
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -21,33 +22,11 @@ const ArticleForm = () => {
     const [message, setMessage] = useState(null);
     const [coverImagePreview, setCoverImagePreview] = useState('');
     const [loading, setLoading] = useState(false);
-    const [token, setToken] = useState(null); // State for token
-
-    useEffect(() => {
-        // Fetch the token from userManager
-        const fetchToken = async () => {
-            try {
-                const user = await userManager.getUser(); // Await the promise
-                if (user) {
-                    setToken(user.access_token);
-                    console.log("Access token1: " + user.access_token);
-                } else {
-                    console.error('User not authenticated');
-                    navigate('/login'); // Redirect to login if user is not authenticated
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                navigate('/login'); // Handle the error (e.g., by redirecting to login)
-            }
-        };
-
-        fetchToken(); // Call the async function
-    }, [navigate]); // Add navigate to the dependency array
 
     useEffect(() => {
         const fetchArticleId = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:9000/api/v1/uuid');
+                const response = await axios.get(baseUrl+'/uuid');
                 setArticleId(response.data);
             } catch (error) {
                 console.error('Error fetching article ID:', error);
@@ -74,11 +53,8 @@ const ArticleForm = () => {
 
     const handleCoverImageUpload = async (e) => {
         const file = e.target.files[0];
-        const user = await userManager.getUser()
-        const token = user.access_token
         if (file && token && articleId) {
             try {
-                console.log("before img+ " + token )
                 const { url } = await uploadImage(file, token);
                 console.log('Image uploaded, URL:', url); // Debugging line
                 setFormData({
@@ -95,8 +71,7 @@ const ArticleForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user = await userManager.getUser()
-        const token = user.access_token
+        
         if (!token) {
             setMessage('Error: No authentication token found');
             return;
@@ -120,7 +95,7 @@ const ArticleForm = () => {
         console.log('Submitting article data:', data); // Debugging line
 
         try {
-            await axios.post('http://localhost:9000/api/v1/article', data, {
+            await axios.post(baseUrl + '/article', data, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`

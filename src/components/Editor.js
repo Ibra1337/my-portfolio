@@ -8,7 +8,8 @@ import { uploadImage } from './utils/imageUpload';
 import { fetchCodeSnippet } from './utils/gitUtils';
 import { userManager } from '../sec/UserManager';
 import { useNavigate } from 'react-router-dom';
-import keyboardShortcuts from './utils/keyboardShortcouts'; // Import your custom hook
+import keyboardShortcuts from './utils/keyboardShortcuts';
+
 
 const Editor = forwardRef(({ value, onChange }, ref) => {
   const [content, setContent] = useState(value || '');

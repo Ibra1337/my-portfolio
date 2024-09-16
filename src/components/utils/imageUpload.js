@@ -1,5 +1,5 @@
 // src/utils/imageUpload.js
-
+import baseUrl from "../../ProtfolioConfig";
 const rescaleImage = (file, maxWidth, maxHeight) => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -46,7 +46,7 @@ export const uploadImage = async (file , token) => {
         const resizedFile = await rescaleImage(file, 600, 600);
         console.log("form upload: " + token)
         // Request the pre-signed URL from your backend
-        const response = await fetch(`http://127.0.0.1:9000/api/v1/cloud/${file.name}`, {
+        const response = await fetch( baseUrl + `/cloud/${file.name}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}` ,

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const useCustomKeyboardShortcuts = (quillRef) => {
+const KeyboardShortcuts = (quillRef) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (!quillRef.current) return;
@@ -32,4 +32,4 @@ const useCustomKeyboardShortcuts = (quillRef) => {
   }, [quillRef]);
 };
 
-export default useCustomKeyboardShortcuts;
+export default KeyboardShortcuts;

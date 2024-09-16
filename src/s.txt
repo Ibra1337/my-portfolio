@@ -1,75 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth } from 'oidc-react';
-import { redirect, useNavigate, useSearchParams } from 'react-router-dom';
-import CookieStateStore from './CookieStorage'; // Import your custom CookieStorage
+#!/bin/bash
 
-const Callback = () => {
-  const { isLoading, error, userManager } = useAuth();
-  const auth = useAuth();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [cookieContent, setCookieContent] = useState(null);
+# Variables
+DOMAIN="ec2-18-159-207-136.eu-central-1.compute.amazonaws.com"  # Replace with your domain or public hostname for Keycloak
+KEY_FILE="keyk.key"
+CSR_FILE="keyk.csr"
+CERT_FILE="keyk.crt"
 
-  useEffect(() => {
-    const cookieStateStore = new CookieStateStore();
-    const state = searchParams.get('state');
+# 1. Generate a private key
+openssl genrsa -out $KEY_FILE 2048
 
-    if (state) {
-      cookieStateStore.get(state).then((expectedState) => {
-        console.log(`Expected state from storage: ${expectedState}`);
-        setCookieContent(expectedState);
-      }).catch((err) => {
-        console.error('Error retrieving state from storage', err);
-      });
-    }
-  }, [searchParams]);
+# 2. Generate a CSR
+openssl req -new -key $KEY_FILE -out $CSR_FILE -subj "/C=PL/ST=maz/L=kosewko/O=ibrai1337/CN=$DOMAIN/emailAddress=ibra1337@ibra1337.blog"
 
-  useEffect(() => {
-    const code = searchParams.get('code');
-    const state = searchParams.get('state');
-
-
-    if (!isLoading && code && state && !auth.userData && cookieContent) {
-      console.log(`Code from URL: ${code}, State from URL: ${state}`);
-      const parsedCookieContent = JSON.parse(cookieContent);
-      const cookieState = parsedCookieContent?.state;
-      
-      if (cookieState === state) {
-        console.log('State matches, proceeding with sign-in callback.');
-
-        userManager.signinCallback().then((user) => {
-          console.log('User: ', user);
-          console.log('Successful LogIn');
-          // Navigate or perform other actions after successful login
-        }).catch((err) => {
-          console.error('Signin callback error', err);
-        });
-      } else {
-        console.error('State mismatch! Expected: ', cookieState, ' Provided: ', state);
-        // Handle state mismatch, e.g., redirect or show an error message
-      }
-    } else if (auth.userData) {
-      const parsedCookieContent = JSON.parse(cookieContent);
-      const redirec = parsedCookieContent?.data.redirectUri
-      console.log(redirec)
-      navigate(redirec)
-      console.log("Authenticated");
-    }
-  }, [isLoading, error, navigate, userManager, searchParams, cookieContent, auth.userData]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    console.error('OIDC error:', error);
-    return <div>Error: {error.message}</div>;
-  }
-
-  console.log(auth.userData);
-  console.log("=============================================================");
-  console.log(auth.userData?.access_token);
-  return null;
-};
-
-export default Callback;
+# Show CSR
+echo "Generated CSR:"
+openssl req -noout -text -in $CSR_FILE
