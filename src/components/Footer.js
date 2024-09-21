@@ -20,7 +20,7 @@ const Footer = () => (
               <h2>Contact</h2>
             </header>
             <ul className="social">
-            <li><a className="icon brands fa-github" href="https://github.com/ibra337" target="_blank" rel="noopener noreferrer"><span className="label">GitHub</span></a></li>
+            <li><a className="icon brands fa-github" href="https://github.com/Ibra1337" target="_blank" rel="noopener noreferrer"><span className="label">GitHub</span></a></li>
               <li><a className="icon brands fa-linkedin-in" href="https://www.linkedin.com/in/ibrahim-kamil-jadou-988a86298"><span className="label">LinkedIn</span></a></li>
             </ul>
             <ul className="contact">
